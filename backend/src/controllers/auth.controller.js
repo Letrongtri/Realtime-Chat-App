@@ -1,6 +1,8 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import { generateToken } from "../lib/utils.js";
+import { sendWelcomeEmail } from "../emails/emailHandlers.js";
+import { ENV } from "../lib/env.js";
 
 export const signup = async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -52,6 +54,12 @@ export const signup = async (req, res) => {
           avatar: newUser.avatar,
         },
       });
+
+      // send welcome email
+      const clientUrl = ENV.CLIENT_URL;
+      if (clientUrl) {
+        await sendWelcomeEmail(mail, name, clientUrl);
+      }
     } else {
       res.status(400).json({ message: "Signup failed" });
     }
