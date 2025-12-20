@@ -20,6 +20,16 @@ const userSchema = new mongoose.Schema(
       type: Object,
       default: {},
     },
+    friends: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    lastSeen: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     timestamps: true, // created_at, updated_at
