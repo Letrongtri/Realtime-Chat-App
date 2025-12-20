@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 
 import authRouter from "./routes/auth.route.js";
+import userRouter from "./routes/user.route.js";
 import messageRouter from "./routes/message.route.js";
 import { connectDB } from "./lib/db.js";
 import { ENV } from "./lib/env.js";
@@ -17,6 +18,7 @@ app.use(express.json()); // for parsing application/json
 app.use(cookieParser());
 
 app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
 app.use("/api/message", messageRouter);
 
 // Rate limit
