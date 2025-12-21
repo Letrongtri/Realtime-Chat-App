@@ -6,14 +6,11 @@ import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import friendRouter from "./routes/friend.route.js";
 import messageRouter from "./routes/message.route.js";
-import { connectDB } from "./lib/db.js";
 import { ENV } from "./lib/env.js";
 import { arcjectProtection } from "../middleware/arcject.middleware.js";
 
 const app = express();
 const __dirname = path.resolve();
-
-const PORT = ENV.PORT || 3000;
 
 app.use(express.json()); // for parsing application/json
 app.use(cookieParser());
@@ -35,10 +32,4 @@ if (ENV.NODE_ENV === "production") {
   });
 }
 
-connectDB()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => console.log(error));
+export default app;
