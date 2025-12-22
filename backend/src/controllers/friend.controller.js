@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
+import Chat from "../models/Chat.js";
 
 export const getAllFriends = async (req, res) => {
   try {
@@ -128,7 +129,23 @@ export const acceptFriendRequest = async (req, res) => {
       $addToSet: { friends: request.senderId },
     });
 
-    res.status(200).json({ message: "Friend request accepted successfully" });
+    // Create a chat between the two users
+    let chat = await Chat.findOne({
+      isGroup: false,
+      members: { $all: [user._id, request.senderId] },
+    });
+    if (!chat) {
+      chat = new Chat({
+        isGroup: false,
+        members: [user._id, request.senderId],
+      });
+      await chat.save();
+    }
+
+    res.status(200).json({
+      message: "Friend request accepted successfully",
+      chatId: chat._id,
+    });
   } catch (error) {
     console.log("Error accepting friend request controller:", error);
     res.status(500).json({ message: "Internal server error" });
