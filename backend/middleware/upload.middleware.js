@@ -1,12 +1,12 @@
 import multer from "multer";
 
 const storage = multer.diskStorage({
-  filename: (req, file, cb) => {
+  filename: (_, file, cb) => {
     cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
-const fileFilter = (req, file, cb) => {
+const imageFilter = (_, file, cb) => {
   if (file.mimetype.startsWith("image/")) {
     cb(null, true);
   } else {
@@ -14,8 +14,13 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-export const upload = multer({
+export const uploadAvatar = multer({
   storage,
-  fileFilter,
+  fileFilter: imageFilter,
   limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
+});
+
+export const uploadFile = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // 10MB
 });

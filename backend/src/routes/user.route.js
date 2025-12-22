@@ -1,6 +1,6 @@
 import express from "express";
 import { protectRoute } from "../../middleware/auth.middleware.js";
-import { upload } from "../../middleware/upload.middleware.js";
+import { uploadAvatar } from "../../middleware/upload.middleware.js";
 import {
   updateProfile,
   deleteProfile,
@@ -13,7 +13,12 @@ const router = express.Router();
 router.get("/profile", protectRoute, (req, res) => {
   res.status(200).json(req.user);
 });
-router.put("/profile", protectRoute, upload.single("avatar"), updateProfile);
+router.put(
+  "/profile",
+  protectRoute,
+  uploadAvatar.single("avatar"),
+  updateProfile,
+);
 router.delete("/profile", protectRoute, deleteProfile);
 
 router.get("/search", searchUsers);

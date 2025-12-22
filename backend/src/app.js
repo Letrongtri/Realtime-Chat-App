@@ -5,6 +5,7 @@ import path from "path";
 import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import friendRouter from "./routes/friend.route.js";
+import chatRouter from "./routes/chat.route.js";
 import messageRouter from "./routes/message.route.js";
 import { ENV } from "./lib/env.js";
 import { arcjectProtection } from "../middleware/arcject.middleware.js";
@@ -18,6 +19,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/friends", friendRouter);
+app.use("/api/chats", chatRouter);
 app.use("/api/message", messageRouter);
 
 // Rate limit

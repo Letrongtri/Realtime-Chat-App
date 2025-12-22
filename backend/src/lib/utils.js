@@ -20,3 +20,28 @@ export const generateToken = (userId, res) => {
 
   return token;
 };
+
+export const generateGroupName = (users, maxLength = 40) => {
+  const lastNames = users.map((u) => {
+    const parts = u.fullName.trim().split(/\s+/);
+    return parts[parts.length - 1];
+  });
+
+  let name = "";
+  let count = 0;
+
+  for (let i = 0; i < lastNames.length; i++) {
+    const next = count === 0 ? lastNames[i] : `${name}, ${lastNames[i]}`;
+
+    if (next.length > maxLength) {
+      const remaining = lastNames.length - count;
+      name += ` +${remaining} người khác`;
+      break;
+    }
+
+    name = next;
+    count++;
+  }
+
+  return name;
+};
