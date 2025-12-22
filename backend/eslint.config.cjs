@@ -14,6 +14,17 @@ module.exports = [
     files: ["**/*.{js,mjs,cjs}"],
     ignores: ["{dist,public}/**/*"],
   },
+
+  {
+    files: ["**/*.test.js", "**/*.spec.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest,
+      },
+    },
+  },
+
   js.configs.recommended,
   eslintConfigPrettier,
 ];
