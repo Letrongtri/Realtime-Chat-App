@@ -8,6 +8,10 @@ import {
   updateChat,
   leaveChat,
 } from "../controllers/chat.controller.js";
+import {
+  getMessagesByChatId,
+  sendMessage,
+} from "../controllers/message.controller.js";
 import { uploadFile } from "../../middleware/upload.middleware.js";
 
 const router = express.Router();
@@ -21,5 +25,8 @@ router.get("/:chatId", getChatById);
 router.put("/:chatId", updateChat); // change group name, add members
 router.delete("/:chatId", deleteChat); // delete group
 router.put("/:chatId/leave", leaveChat);
+
+router.get("/:chatId/messages", getMessagesByChatId);
+router.post("/:chatId/messages", uploadFile.array("files", 20), sendMessage);
 
 export default router;
