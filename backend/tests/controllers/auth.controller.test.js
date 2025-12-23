@@ -160,6 +160,7 @@ describe("Auth Controller", () => {
 
   describe("logout", () => {
     it("should clear cookie and return 200", async () => {
+      req.cookies = { jwt: "token" };
       await logout(req, res);
       expect(res.cookie).toHaveBeenCalledWith("jwt", "", { maxAge: 0 });
       expect(res.status).toHaveBeenCalledWith(200);

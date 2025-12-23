@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
+import { MongoMemoryReplSet } from "mongodb-memory-server";
 
 let mongod;
 
 // Kết nối đến DB ảo trong RAM
 export const connect = async () => {
-  mongod = await MongoMemoryServer.create();
+  mongod = await MongoMemoryReplSet.create({
+    replSet: { count: 1, storageEngine: "wiredTiger" },
+  });
   const uri = mongod.getUri();
   await mongoose.connect(uri);
 };

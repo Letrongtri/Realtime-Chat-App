@@ -1,5 +1,5 @@
 import { isSpoofedBot } from "@arcjet/inspect";
-import aj from "../src/lib/arcject.js";
+import aj from "../lib/arcject.js";
 
 export const arcjectProtection = async (req, res, next) => {
   try {

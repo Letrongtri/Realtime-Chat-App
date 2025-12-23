@@ -32,7 +32,7 @@ export const createChat = async (req, res) => {
     let { members, isGroup, groupName } = req.body;
 
     if (!members || !Array.isArray(members) || members.length === 0) {
-      return res.status(400).json({ message: "Members is required" });
+      return res.status(400).json({ message: "Members are required" });
     }
 
     // đảm bảo user nằm trong members
@@ -215,7 +215,10 @@ export const deleteChat = async (req, res) => {
     }
 
     // xoá messages liên quan
-    await Message.deleteMany({ chat: chatId }).session(session);
+    await Message.updateMany(
+      { chat: chatId },
+      { $set: { isDeleted: true } },
+    ).session(session);
 
     // xoá chat
     await Chat.deleteOne({ _id: chatId }).session(session);
@@ -291,6 +294,17 @@ export const leaveChat = async (req, res) => {
     });
 
     if (updatedChat.members.length === 0) {
+      // xoá avatar group
+      if (chat.groupAvatar?.publicId) {
+        await cloudinary.uploader.destroy(chat.groupAvatar.publicId);
+      }
+
+      // xoá messages liên quan
+      await Message.updateMany(
+        { chat: chatId },
+        { $set: { isDeleted: true } },
+      ).session(session);
+
       await Chat.findByIdAndDelete(chatId).session(session);
 
       await session.commitTransaction();

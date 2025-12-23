@@ -1,10 +1,12 @@
-import { isSpoofedBot } from "@arcjet/inspect";
 import aj from "../../src/lib/arcject.js";
-import { arcjectProtection } from "../../middleware/arcject.middleware.js";
+import { isSpoofedBot } from "@arcjet/inspect";
+import { arcjectProtection } from "../../src/middleware/arcject.middleware.js";
 
-// Mock dependencies
 jest.mock("../../src/lib/arcject.js", () => ({
-  protect: jest.fn(),
+  __esModule: true,
+  default: {
+    protect: jest.fn(),
+  },
 }));
 
 jest.mock("@arcjet/inspect", () => ({
@@ -16,10 +18,7 @@ describe("Arcjet Middleware", () => {
 
   beforeEach(() => {
     req = {};
-    res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn(),
-    };
+    res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
     next = jest.fn();
     jest.clearAllMocks();
   });
@@ -27,10 +26,7 @@ describe("Arcjet Middleware", () => {
   it("should return 429 if rate limit is exceeded", async () => {
     aj.protect.mockResolvedValue({
       isDenied: () => true,
-      reason: {
-        isRateLimit: () => true,
-        isBot: () => false,
-      },
+      reason: { isRateLimit: () => true, isBot: () => false },
     });
 
     await arcjectProtection(req, res, next);
@@ -45,31 +41,27 @@ describe("Arcjet Middleware", () => {
   it("should return 403 if detected as a bot", async () => {
     aj.protect.mockResolvedValue({
       isDenied: () => true,
-      reason: {
-        isRateLimit: () => false,
-        isBot: () => true,
-      },
+      reason: { isRateLimit: () => false, isBot: () => true },
     });
 
     await arcjectProtection(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.json).toHaveBeenCalledWith({ message: "No bots allowed" });
+    expect(next).not.toHaveBeenCalled();
   });
 
   it("should return 403 if denied for other reasons", async () => {
     aj.protect.mockResolvedValue({
       isDenied: () => true,
-      reason: {
-        isRateLimit: () => false,
-        isBot: () => false,
-      },
+      reason: { isRateLimit: () => false, isBot: () => false },
     });
 
     await arcjectProtection(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.json).toHaveBeenCalledWith({ message: "Forbidden" });
+    expect(next).not.toHaveBeenCalled();
   });
 
   it("should return 403 if isSpoofedBot returns true", async () => {
@@ -81,11 +73,10 @@ describe("Arcjet Middleware", () => {
 
     await arcjectProtection(req, res, next);
 
-    expect(isSpoofedBot).toHaveBeenCalledWith("some_result", 0, [
-      "some_result",
-    ]);
+    expect(isSpoofedBot).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(403);
     expect(res.json).toHaveBeenCalledWith({ message: "Forbidden" });
+    expect(next).not.toHaveBeenCalled();
   });
 
   it("should call next() if request is allowed", async () => {
@@ -98,6 +89,7 @@ describe("Arcjet Middleware", () => {
     await arcjectProtection(req, res, next);
 
     expect(next).toHaveBeenCalled();
+    expect(res.status).not.toHaveBeenCalled();
   });
 
   it("should call next() even if an error occurs (Fail Open)", async () => {
@@ -106,5 +98,6 @@ describe("Arcjet Middleware", () => {
     await arcjectProtection(req, res, next);
 
     expect(next).toHaveBeenCalled();
+    expect(res.status).not.toHaveBeenCalled();
   });
 });

@@ -88,7 +88,7 @@ describe("Message Controller", () => {
 
       await getMessagesByChatId(req, res);
 
-      expect(Message.find).toHaveBeenCalledWith({ chat: mockId });
+      expect(Message.find).toHaveBeenCalledWith({ chatId: mockId });
       expect(mockQuery.populate).toHaveBeenNthCalledWith(
         1,
         "senderId",

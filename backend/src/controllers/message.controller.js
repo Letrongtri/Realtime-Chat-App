@@ -23,8 +23,21 @@ export const getMessagesByChatId = async (req, res) => {
   try {
     const user = req.user;
     const chatId = req.params.chatId;
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 20;
+
+    const page = Number(req.query.page ?? 1);
+    const limit = Number(req.query.limit ?? 20);
+    if (
+      !Number.isInteger(page) ||
+      page <= 0 ||
+      !Number.isInteger(limit) ||
+      limit <= 0 ||
+      limit > 100
+    ) {
+      return res.status(400).json({
+        message: "Invalid page or limit",
+      });
+    }
+
     const skip = (page - 1) * limit;
 
     if (!user) {
@@ -48,7 +61,7 @@ export const getMessagesByChatId = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    const messages = await Message.find({ chat: chatId })
+    const messages = await Message.find({ chatId })
       .populate("senderId", "fullName avatar")
       .populate({
         path: "replyTo",
@@ -221,9 +234,14 @@ export const reactToMessage = async (req, res) => {
 
     const message = await getMessageOrThrow(messageId);
 
-    const chat = await Chat.findById(message.chat);
+    const chat = await Chat.findById(message.chatId);
     if (!chat.members.some((member) => member.equals(user._id))) {
       return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const allowedTypes = ["like", "love", "haha", "wow", "sad", "angry"];
+    if (!allowedTypes.includes(type)) {
+      return res.status(400).json({ message: "Invalid reaction type" });
     }
 
     const existingIndex = message.reactions.findIndex((r) =>

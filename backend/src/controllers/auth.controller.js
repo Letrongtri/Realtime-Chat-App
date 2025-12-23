@@ -105,8 +105,12 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (_, res) => {
+export const logout = async (req, res) => {
   try {
+    if (!req.cookies?.jwt) {
+      return res.status(401).json({ message: "Not logged in" });
+    }
+
     res.cookie("jwt", "", { maxAge: 0 });
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
