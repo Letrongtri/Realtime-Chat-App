@@ -8,7 +8,7 @@ import friendRouter from "./routes/friend.route.js";
 import chatRouter from "./routes/chat.route.js";
 import messageRouter from "./routes/message.route.js";
 import { ENV } from "./lib/env.js";
-import { arcjectProtection } from "../middleware/arcject.middleware.js";
+import { arcjectProtection } from "./middleware/arcject.middleware.js";
 
 const app = express();
 const __dirname = path.resolve();

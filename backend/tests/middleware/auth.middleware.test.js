@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { protectRoute } from "../../middleware/auth.middleware.js";
+import { protectRoute } from "../../src/middleware/auth.middleware.js";
 import User from "../../src/models/User.js";
 
 jest.mock("jsonwebtoken");

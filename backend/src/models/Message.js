@@ -65,7 +65,7 @@ const messageSchema = new mongoose.Schema(
         },
       },
     ],
-    repliedTo: {
+    replyTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Chat",
     },

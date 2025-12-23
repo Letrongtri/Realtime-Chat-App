@@ -5,4 +5,5 @@ export default {
   },
   testTimeout: 30000, // Tăng thời gian chờ (mặc định 5s đôi khi không đủ connect DB)
   verbose: true, // Hiển thị chi tiết log
+  setupFilesAfterEnv: ["<rootDir>/tests/setup.js"],
 };

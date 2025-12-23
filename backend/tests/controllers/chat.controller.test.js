@@ -58,7 +58,9 @@ describe("Chat Controller", () => {
       req.body = {};
       await createChat(req, res);
       expect(res.status).toHaveBeenCalledWith(400);
-      expect(res.json).toHaveBeenCalledWith({ message: "Members is required" });
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Members are required",
+      });
     });
 
     it("should fail if members array is less than 2 in a private chat", async () => {
@@ -443,22 +445,40 @@ describe("Chat Controller", () => {
         groupAvatar: { publicId: "pid" },
       };
 
-      // Mock findById to support session chaining
+      mockChat.groupAdmin.equals = (id) =>
+        mockChat.groupAdmin.toString() === id.toString();
+
+      // findById().session()
       Chat.findById.mockReturnValue({
         session: jest.fn().mockResolvedValue(mockChat),
       });
-      Message.deleteMany.mockReturnValue({
+
+      // Message.updateMany().session()
+      Message.updateMany.mockImplementation(() => ({
         session: jest.fn().mockResolvedValue({}),
-      });
-      Chat.deleteOne.mockReturnValue({
+      }));
+
+      // Chat.deleteOne().session()
+      Chat.deleteOne.mockImplementation(() => ({
         session: jest.fn().mockResolvedValue({}),
-      });
+      }));
+
+      // cloudinary
+      cloudinary.uploader.destroy = jest.fn().mockResolvedValue({});
 
       await deleteChat(req, res);
 
       expect(cloudinary.uploader.destroy).toHaveBeenCalledWith("pid");
+      expect(Message.updateMany).toHaveBeenCalledWith(
+        { chat: chatId },
+        { $set: { isDeleted: true } },
+      );
+      expect(Chat.deleteOne).toHaveBeenCalledWith({ _id: chatId });
       expect(mockSession.commitTransaction).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Chat deleted successfully",
+      });
     });
   });
 
@@ -653,18 +673,28 @@ describe("Chat Controller", () => {
 
       mockFindByIdSession(mockChat);
 
-      // Update trả về mảng rỗng
-      const updatedChatMock = { members: [] };
-      Chat.findByIdAndUpdate.mockResolvedValue(updatedChatMock);
+      // findByIdAndUpdate → trả về members rỗng
+      Chat.findByIdAndUpdate.mockResolvedValue({ members: [] });
 
-      // Mock Delete (có chain session)
-      Chat.findByIdAndDelete.mockReturnValue({
+      // Message.updateMany().session()
+      Message.updateMany.mockImplementation(() => ({
         session: jest.fn().mockResolvedValue({}),
-      });
+      }));
+
+      // Chat.findByIdAndDelete().session()
+      Chat.findByIdAndDelete.mockImplementation(() => ({
+        session: jest.fn().mockResolvedValue({}),
+      }));
 
       await leaveChat(req, res);
 
-      expect(Chat.findByIdAndDelete).toHaveBeenCalled();
+      // assertions
+      expect(Chat.findByIdAndUpdate).toHaveBeenCalled();
+      expect(Message.updateMany).toHaveBeenCalledWith(
+        { chat: req.params.chatId },
+        { $set: { isDeleted: true } },
+      );
+      expect(Chat.findByIdAndDelete).toHaveBeenCalledWith(req.params.chatId);
       expect(mockSession.commitTransaction).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({

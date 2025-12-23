@@ -1,5 +1,5 @@
 import express from "express";
-import { protectRoute } from "../../middleware/auth.middleware.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 import {
   createChat,
   deleteChat,
@@ -12,7 +12,7 @@ import {
   getMessagesByChatId,
   sendMessage,
 } from "../controllers/message.controller.js";
-import { uploadFile } from "../../middleware/upload.middleware.js";
+import { uploadAvatar, uploadFile } from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -22,7 +22,7 @@ router.get("/", getAllChats);
 router.post("/", createChat);
 
 router.get("/:chatId", getChatById);
-router.put("/:chatId", updateChat); // change group name, add members
+router.put("/:chatId", uploadAvatar.single("avatar"), updateChat); // change group name, add members
 router.delete("/:chatId", deleteChat); // delete group
 router.put("/:chatId/leave", leaveChat);
 
