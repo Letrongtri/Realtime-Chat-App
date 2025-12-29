@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
 import Logo from "../assets/logo.svg?react";
-import { LockIcon, MailIconn } from "lucide-react";
+import { LockIcon, MailIcon } from "lucide-react";
 import { LoaderIcon } from "react-hot-toast";
 import { Link } from "react-router";
 
