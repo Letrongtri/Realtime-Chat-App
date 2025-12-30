@@ -12,7 +12,10 @@ import {
   getMessagesByChatId,
   sendMessage,
 } from "../controllers/message.controller.js";
-import { uploadAvatar, uploadFile } from "../middleware/upload.middleware.js";
+import {
+  handleUploadAvatar,
+  handleUploadFile as handleUploadFiles,
+} from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -22,11 +25,11 @@ router.get("/", getAllChats);
 router.post("/", createChat);
 
 router.get("/:chatId", getChatById);
-router.put("/:chatId", uploadAvatar.single("avatar"), updateChat); // change group name, add members
+router.put("/:chatId", handleUploadAvatar, updateChat); // change group name, add members
 router.delete("/:chatId", deleteChat); // delete group
 router.put("/:chatId/leave", leaveChat);
 
 router.get("/:chatId/messages", getMessagesByChatId);
-router.post("/:chatId/messages", uploadFile.array("files", 20), sendMessage);
+router.post("/:chatId/messages", handleUploadFiles, sendMessage);
 
 export default router;

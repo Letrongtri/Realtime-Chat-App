@@ -1,26 +1,40 @@
 import multer from "multer";
+import { uploadAvatar, uploadFile } from "../lib/multer.js";
 
-const storage = multer.diskStorage({
-  filename: (_, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname);
-  },
-});
+export const handleUploadAvatar = (req, res, next) => {
+  const upload = uploadAvatar.single("avatar");
 
-const imageFilter = (_, file, cb) => {
-  if (file.mimetype.startsWith("image/")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only image files are allowed"), false);
-  }
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res
+          .status(400)
+          .json({ message: "File too large. Maximum size is 2MB." });
+      }
+
+      return res.status(400).json({ message: err.message });
+    } else if (err) {
+      return res.status(400).json({ message: err.message });
+    }
+    next();
+  });
 };
 
-export const uploadAvatar = multer({
-  storage,
-  fileFilter: imageFilter,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
-});
+export const handleUploadFile = (req, res, next) => {
+  const upload = uploadFile.array("files", 20);
 
-export const uploadFile = multer({
-  storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 10MB
-});
+  upload(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      if (err.code === "LIMIT_FILE_SIZE") {
+        return res
+          .status(400)
+          .json({ message: "File too large. Maximum size is 50MB." });
+      }
+
+      return res.status(400).json({ message: err.message });
+    } else if (err) {
+      return res.status(400).json({ message: err.message });
+    }
+    next();
+  });
+};
