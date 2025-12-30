@@ -1,3 +1,4 @@
+import multer from "multer";
 import cloudinary from "../lib/cloudinary.js";
 import User from "../models/User.js";
 
@@ -55,6 +56,18 @@ export const updateProfile = async (req, res) => {
       },
     });
   } catch (error) {
+    if (error instanceof multer.MulterError) {
+      if (error.code === "LIMIT_FILE_SIZE") {
+        return res
+          .status(400)
+          .json({ message: "File is too large. Maximum size is 2MB" });
+      }
+    }
+
+    if (error.message === "Only image files are allowed") {
+      return res.status(400).json({ message: error.message });
+    }
+
     console.log("Error updating profile controller:", error);
     res.status(500).json({ message: "Internal server error" });
   }

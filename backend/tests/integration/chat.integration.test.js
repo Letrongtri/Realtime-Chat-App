@@ -19,10 +19,7 @@ import {
   getMessagesByChatId,
   sendMessage,
 } from "../../src/controllers/message.controller.js";
-import {
-  uploadAvatar,
-  uploadFile,
-} from "../../src/middleware/upload.middleware.js";
+import { uploadAvatar, uploadFile } from "../../src/lib/multer.js";
 import cloudinary from "../../src/lib/cloudinary.js";
 import Message from "../../src/models/Message.js";
 

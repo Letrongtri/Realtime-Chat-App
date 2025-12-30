@@ -62,4 +62,5 @@ export const useAuthStore = create((set) => ({
       console.log("Error logging out", error);
     }
   },
+  setAuthUser: (user) => set({ authUser: user }),
 }));

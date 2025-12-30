@@ -13,7 +13,7 @@ import {
 } from "../../src/controllers/message.controller.js";
 import Message from "../../src/models/Message.js";
 import { createChat } from "../../src/controllers/chat.controller.js";
-import { uploadFile } from "../../src/middleware/upload.middleware.js";
+import { uploadFile } from "../../src/lib/multer.js";
 
 const app = express();
 app.use(express.json());

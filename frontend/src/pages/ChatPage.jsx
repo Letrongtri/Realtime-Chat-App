@@ -5,13 +5,11 @@ import ChatList from "../components/ChatList";
 import ContactList from "../components/ContactList";
 import NoChatPlaceholder from "../components/NoChatPlaceHolder";
 import ProfileHeader from "../components/ProfileHeader";
-import { useAuthStore } from "../store/useAuthStore";
 import { useChatStore } from "../store/useChatStore";
 import { useSettingStore } from "../store/useSettingStore";
 
 function ChatPage() {
-  const { logout } = useAuthStore();
-  const { activeTab, isSoundEnabled } = useSettingStore();
+  const { activeTab } = useSettingStore();
   const { currentChat } = useChatStore();
 
   return (
