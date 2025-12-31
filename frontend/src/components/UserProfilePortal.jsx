@@ -1,10 +1,15 @@
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useUserStore } from "../store/useUserStore";
-import ConfirmDialog from "./ConfirmDialog";
 import { LoaderIcon } from "react-hot-toast";
 
-function UserProfileModal({ open, user, onClose, onDelete }) {
+function UserProfilePortal({
+  open,
+  user,
+  onClose,
+  onChangePassword,
+  onDelete,
+}) {
   const [userData, setUserData] = useState(user);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const { updateProfile, isUpdatingProfile } = useUserStore();
@@ -97,7 +102,7 @@ function UserProfileModal({ open, user, onClose, onDelete }) {
                 onChange={(e) =>
                   setUserData({ ...userData, fullName: e.target.value })
                 }
-                className="input input-bordered w-full bg-slate-800"
+                className="input input-bordered w-full bg-slate-800 user-input"
               />
             </div>
 
@@ -111,7 +116,7 @@ function UserProfileModal({ open, user, onClose, onDelete }) {
                 onChange={(e) =>
                   setUserData({ ...userData, email: e.target.value })
                 }
-                className="input input-bordered w-full bg-slate-800"
+                className="input input-bordered w-full bg-slate-800 user-input"
               />
             </div>
           </div>
@@ -131,7 +136,11 @@ function UserProfileModal({ open, user, onClose, onDelete }) {
             )}
           </button>
 
-          <button type="button" className="btn btn-sm btn-outline w-full">
+          <button
+            type="button"
+            className="btn btn-sm btn-outline w-full"
+            onClick={onChangePassword}
+          >
             Change password
           </button>
 
@@ -152,4 +161,4 @@ function UserProfileModal({ open, user, onClose, onDelete }) {
   );
 }
 
-export default UserProfileModal;
+export default UserProfilePortal;

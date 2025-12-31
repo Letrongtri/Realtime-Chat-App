@@ -3,8 +3,9 @@ import { LogOutIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useSettingStore } from "../store/useSettingStore";
 import ConfirmDialog from "./ConfirmDialog";
-import UserProfileModal from "./UserProfilePortal";
+import UserProfilePortal from "./UserProfilePortal";
 import { useUserStore } from "../store/useUserStore";
+import ChangePasswordPortal from "./ChangePasswordPortal";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
@@ -14,6 +15,7 @@ function ProfileHeader() {
   const [openLogoutDialog, setOpenLogoutDialog] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
   const { deleteProfile } = useUserStore();
 
   const handleDeleteProfile = async () => {
@@ -77,11 +79,15 @@ function ProfileHeader() {
           </button>
         </div>
 
-        <UserProfileModal
+        <UserProfilePortal
           key={"user-modal-key"}
           open={openProfile}
           user={authUser}
           onClose={() => setOpenProfile(false)}
+          onChangePassword={() => {
+            setOpenChangePassword(true);
+            setOpenProfile(false);
+          }}
           onDelete={() => {
             setOpenDeleteDialog(true);
             setOpenProfile(false);
@@ -115,6 +121,14 @@ function ProfileHeader() {
             handleDeleteProfile();
             setOpenProfile(false);
             logout();
+          }}
+        />
+
+        <ChangePasswordPortal
+          open={openChangePassword}
+          onClose={() => {
+            setOpenChangePassword(false);
+            setOpenProfile(true);
           }}
         />
       </div>
