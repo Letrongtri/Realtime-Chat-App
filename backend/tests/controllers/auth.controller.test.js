@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import {
+  changePassword,
   login,
   logout,
   signup,
@@ -155,6 +156,105 @@ describe("Auth Controller", () => {
 
       expect(generateToken).toHaveBeenCalledWith("user123", res);
       expect(res.status).toHaveBeenCalledWith(200);
+    });
+  });
+
+  describe("changePassword", () => {
+    it("should return 400 if fields are missing", async () => {
+      req.body = { oldPassword: "", newPassword: "" };
+      await changePassword(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "All fields are required",
+      });
+    });
+
+    it("should return 404 if user not found", async () => {
+      req.body = { oldPassword: "oldPassword", newPassword: "newPassword" };
+      req.user = null;
+
+      await changePassword(req, res);
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: "User not found" });
+    });
+
+    it("should return 400 if new password is invalid", async () => {
+      req.body = { oldPassword: "oldPassword", newPassword: "123" };
+      req.user = {
+        fullName: "Test",
+        email: "test@test.com",
+        password: "oldPassword",
+      };
+      await changePassword(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Password must be at least 6 characters long",
+      });
+    });
+
+    it("should return 400 if new password is same as old password", async () => {
+      req.body = { oldPassword: "oldPassword", newPassword: "oldPassword" };
+      req.user = {
+        fullName: "Test",
+        email: "test@test.com",
+        password: "oldPassword",
+      };
+
+      await changePassword(req, res);
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "New password must be different",
+      });
+    });
+
+    it("should return 401 if old password is incorrect", async () => {
+      req.body = { oldPassword: "wrongPassword", newPassword: "newPassword" };
+      req.user = {
+        fullName: "Test",
+        email: "test@test.com",
+        password: "oldPassword",
+        save: jest.fn(),
+      };
+
+      User.findOne.mockReturnValue({
+        select: jest.fn().mockResolvedValue({
+          password: "oldPassword",
+        }),
+      });
+
+      bcrypt.compare.mockResolvedValue(false);
+      bcrypt.genSalt.mockResolvedValue("salt");
+      bcrypt.hash.mockResolvedValue("newPassword");
+
+      await changePassword(req, res);
+      expect(res.status).toHaveBeenCalledWith(401);
+      expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
+    });
+
+    it("should return 200 on success", async () => {
+      req.body = { oldPassword: "oldPassword", newPassword: "newPassword" };
+      req.user = {
+        fullName: "Test",
+        email: "test@test.com",
+        password: "oldPassword",
+        save: jest.fn(),
+      };
+
+      User.findOne.mockReturnValue({
+        select: jest.fn().mockResolvedValue({
+          password: "oldPassword",
+        }),
+      });
+
+      bcrypt.compare.mockResolvedValue(true);
+      bcrypt.genSalt.mockResolvedValue("salt");
+      bcrypt.hash.mockResolvedValue("newPassword");
+
+      await changePassword(req, res);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Password changed successfully",
+      });
     });
   });
 
