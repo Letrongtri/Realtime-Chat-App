@@ -5,6 +5,7 @@ import {
   signup,
   login,
   logout,
+  changePassword,
 } from "../../src/controllers/auth.controller.js";
 import { protectRoute } from "../../src/middleware/auth.middleware.js";
 import { clearDatabase, closeDatabase, connect } from "../db_handler.js";
@@ -18,11 +19,13 @@ app.use(cookieParser());
 const routes = {
   signup: "/api/auth/signup",
   login: "/api/auth/login",
+  changePassword: "/api/auth/change-password",
   logout: "/api/auth/logout",
   check: "/api/auth/check",
 };
 app.post(routes.signup, signup);
 app.post(routes.login, login);
+app.post(routes.changePassword, protectRoute, changePassword);
 app.post(routes.logout, logout);
 app.get(routes.check, protectRoute, (req, res) => {
   res.status(200).json(req.user);
@@ -91,6 +94,28 @@ describe("Auth Integration Tests", () => {
       });
 
       expect(res.status).toBe(401);
+    });
+  });
+
+  describe(`POST ${routes.changePassword}`, () => {
+    it("should change password successfully", async () => {
+      const signupRes = await request(app).post(routes.signup).send({
+        fullName: "Change Password User",
+        email: "change@example.com",
+        password: "password123",
+      });
+      const cookie = signupRes.headers["set-cookie"];
+
+      const res = await request(app)
+        .post(routes.changePassword)
+        .set("Cookie", cookie)
+        .send({
+          oldPassword: "password123",
+          newPassword: "newpassword456",
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.message).toBe("Password changed successfully");
     });
   });
 
