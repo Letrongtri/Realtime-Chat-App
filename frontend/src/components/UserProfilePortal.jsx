@@ -69,7 +69,7 @@ function UserProfilePortal({
                 <img
                   className="rounded-full size-full object-cover"
                   src={
-                    selectedAvatar || user.avatar.url || "/images/avatar.png"
+                    selectedAvatar || user?.avatar?.url || "/images/avatar.png"
                   }
                   alt="avatar"
                 />

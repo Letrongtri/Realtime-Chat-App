@@ -37,3 +37,27 @@
 .user-input {
   @apply px-3 py-2;
 }
+
+.app-tab {
+  @apply py-1 inline-block rounded-lg text-slate-400;
+}
+
+.app-tab-active {
+  @apply py-1 inline-block rounded-lg text-cyan-400 bg-cyan-500/20;
+}
+
+.input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5 pointer-events-none;
+}
+
+.search-input {
+  @apply w-full bg-slate-800/50 border border-slate-700 text-slate-200 text-sm rounded-lg py-1.5 pl-9 pr-3 outline-none placeholder-slate-500 transition-all focus:ring-1 focus:ring-blue-500;
+}
+
+.icon-btn {
+  @apply text-slate-400 hover:text-slate-200 transition-colors;
+}
+
+.border-top {
+  @apply border-t border-slate-700/50;
+}

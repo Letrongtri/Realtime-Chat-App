@@ -37,7 +37,7 @@ function ProfileHeader() {
           >
             <img
               className="rounded-full size-full object-cover"
-              src={authUser?.avatar.url || "/images/avatar.png"}
+              src={authUser?.avatar?.url || "/images/avatar.png"}
               alt="avatar"
             />
           </div>
@@ -54,7 +54,7 @@ function ProfileHeader() {
         <div className="flex gap-4 items-center">
           {/* SOUNDS */}
           <button
-            className="text-slate-400 hover:text-slate-200 transition-colors"
+            className="icon-btn"
             onClick={() => {
               mouseClickSound.currentTime = 0; // Reset the audio
               mouseClickSound
@@ -72,7 +72,7 @@ function ProfileHeader() {
 
           {/* LOGOUT */}
           <button
-            className="text-slate-400 hover:text-slate-200 transition-colors"
+            className="icon-btn"
             onClick={() => setOpenLogoutDialog(true)}
           >
             <LogOutIcon className="size-5"></LogOutIcon>

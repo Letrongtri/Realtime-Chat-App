@@ -7,6 +7,8 @@ import NoChatPlaceholder from "../components/NoChatPlaceHolder";
 import ProfileHeader from "../components/ProfileHeader";
 import { useChatStore } from "../store/useChatStore";
 import { useSettingStore } from "../store/useSettingStore";
+import SearchSection from "../components/SearchSection";
+import SearchPreview from "../components/SearchPreview";
 
 function ChatPage() {
   const { activeTab } = useSettingStore();
@@ -19,11 +21,19 @@ function ChatPage() {
           {/* SIDE BAR */}
           <div className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col">
             <ProfileHeader />
-            <ActiveTabSwitch />
+            <SearchSection />
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-2">
-              {activeTab === "chats" ? <ChatList /> : <ContactList />}
-            </div>
+            {activeTab === "search" ? (
+              <SearchPreview />
+            ) : (
+              <div className="border-top">
+                <ActiveTabSwitch />
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                  {activeTab === "chats" ? <ChatList /> : <ContactList />}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* MAIN CONTAINT */}
