@@ -1,7 +1,7 @@
 import { createPortal } from "react-dom";
 import { LoaderIcon } from "react-hot-toast";
-import { useAuthStore } from "../store/useAuthStore";
 import { useState } from "react";
+import { useAuthStore } from "../../store/useAuthStore";
 
 function ChangePasswordPortal({ open, onClose }) {
   const { changePassword, isChangingPassword } = useAuthStore();

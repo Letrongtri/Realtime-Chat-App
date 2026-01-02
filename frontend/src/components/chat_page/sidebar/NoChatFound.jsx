@@ -1,5 +1,5 @@
-import Logo from "../assets/logo.svg?react";
-import { useSettingStore } from "../store/useSettingStore";
+import { useSettingStore } from "../../../store/useSettingStore";
+import Logo from "../../../assets/logo.svg?react";
 
 function NoChatsFound() {
   const { setActiveTab } = useSettingStore();

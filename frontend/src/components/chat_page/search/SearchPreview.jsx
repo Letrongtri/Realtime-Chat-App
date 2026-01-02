@@ -1,5 +1,5 @@
-import { useSearchStore } from "../store/useSearchStore";
-import PageLoader from "./PageLoader";
+import { useSearchStore } from "../../../store/useSearchStore";
+import PageLoader from "../../common/PageLoader";
 
 function SearchPreview() {
   const { users, isSearching } = useSearchStore();

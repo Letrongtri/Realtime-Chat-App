@@ -1,7 +1,7 @@
 import { SearchIcon, UserPlus2Icon, Users2Icon } from "lucide-react";
-import { useSettingStore } from "../store/useSettingStore";
 import { useState } from "react";
-import { useSearchStore } from "../store/useSearchStore";
+import { useSettingStore } from "../../../store/useSettingStore";
+import { useSearchStore } from "../../../store/useSearchStore";
 
 function SearchSection() {
   const { activeTab, setActiveTab } = useSettingStore();

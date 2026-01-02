@@ -1,11 +1,11 @@
 import { memo } from "react";
-import { formatMessageTime } from "../lib/dateFns";
-import { useAuthStore } from "../store/useAuthStore";
+import { formatMessageTime } from "../../../lib/dateFns";
+import { useAuthStore } from "../../../store/useAuthStore";
 import {
   generateChatAvatarPath,
   generateChatName,
   generatePreviewMessage,
-} from "../utils/generate";
+} from "../../../utils/generate";
 
 function ChatItems({ chat, onSelectchat }) {
   const { authUser } = useAuthStore();

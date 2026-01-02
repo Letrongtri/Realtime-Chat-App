@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
+import BorderAnimatedContainer from "../components/common/BorderAnimatedContainer";
 import Logo from "../assets/logo.svg?react";
 import { LockIcon, MailIcon } from "lucide-react";
 import { LoaderIcon } from "react-hot-toast";
