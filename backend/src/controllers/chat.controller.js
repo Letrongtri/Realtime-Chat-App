@@ -14,6 +14,7 @@ export const getAllChats = async (req, res) => {
 
     const chats = await Chat.find({ members: { $in: [user._id] } })
       .populate("members", "fullName avatar")
+      .populate("latestMessage")
       .sort({ updatedAt: -1 });
     res.status(200).json(chats);
   } catch (error) {
