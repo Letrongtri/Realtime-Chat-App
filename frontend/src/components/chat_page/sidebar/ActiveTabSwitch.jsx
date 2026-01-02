@@ -1,4 +1,4 @@
-import { useSettingStore } from "../store/useSettingStore";
+import { useSettingStore } from "../../../store/useSettingStore";
 
 function ActiveTabSwitch() {
   const { activeTab, setActiveTab } = useSettingStore();

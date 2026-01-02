@@ -1,14 +1,14 @@
-import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
-import ActiveTabSwitch from "../components/ActiveTabSwitch";
-import ChatContainer from "../components/ChatContainer";
-import ChatList from "../components/ChatList";
-import ContactList from "../components/ContactList";
-import NoChatPlaceholder from "../components/NoChatPlaceHolder";
-import ProfileHeader from "../components/ProfileHeader";
+import BorderAnimatedContainer from "../components/common/BorderAnimatedContainer";
+import ActiveTabSwitch from "../components/chat_page/sidebar/ActiveTabSwitch";
+import ChatContainer from "../components/chat_page/chat_detail/ChatContainer";
+import ChatList from "../components/chat_page/sidebar/ChatList";
+import ContactList from "../components/chat_page/sidebar/ContactList";
+import NoChatPlaceholder from "../components/chat_page/chat_detail/NoChatPlaceholder";
+import ProfileHeader from "../components/chat_page/profile/ProfileHeader";
 import { useChatStore } from "../store/useChatStore";
 import { useSettingStore } from "../store/useSettingStore";
-import SearchSection from "../components/SearchSection";
-import SearchPreview from "../components/SearchPreview";
+import SearchSection from "../components/chat_page/search/SearchSection";
+import SearchPreview from "../components/chat_page/search/SearchPreview";
 
 function ChatPage() {
   const { activeTab } = useSettingStore();

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useChatStore } from "../store/useChatStore";
+import { useChatStore } from "../../../store/useChatStore";
 import NoChatsFound from "./NoChatFound";
 import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 import ChatItems from "./ChatItems";

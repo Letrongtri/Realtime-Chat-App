@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useUserStore } from "../store/useUserStore";
 import { LoaderIcon } from "react-hot-toast";
+import { useUserStore } from "../../../store/useUserStore";
 
 function UserProfilePortal({
   open,

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { LogOutIcon, Volume2Icon, VolumeOffIcon } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore";
-import { useSettingStore } from "../store/useSettingStore";
-import ConfirmDialog from "./ConfirmDialog";
+import { useAuthStore } from "../../../store/useAuthStore";
+import { useSettingStore } from "../../../store/useSettingStore";
+import { useUserStore } from "../../../store/useUserStore";
 import UserProfilePortal from "./UserProfilePortal";
-import { useUserStore } from "../store/useUserStore";
-import ChangePasswordPortal from "./ChangePasswordPortal";
+import ChangePasswordPortal from "../../users/ChangePasswordPortal";
+import ConfirmDialog from "../../common/ConfirmDialog";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
