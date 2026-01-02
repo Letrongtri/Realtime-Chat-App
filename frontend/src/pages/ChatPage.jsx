@@ -29,7 +29,7 @@ function ChatPage() {
               <div className="border-top">
                 <ActiveTabSwitch />
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                <div className="flex-1 overflow-y-auto p-4 space-y-2 border-top">
                   {activeTab === "chats" ? <ChatList /> : <ContactList />}
                 </div>
               </div>

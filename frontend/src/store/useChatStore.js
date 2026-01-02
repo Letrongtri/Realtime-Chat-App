@@ -12,7 +12,8 @@ export const useChatStore = create((set, get) => ({
   isCurrentChatLoading: false,
 
   messages: [],
-  currentPage: 1,
+  limit: 20,
+  currentPage: 0,
   totalPages: 1,
   totalMessages: 0,
   isMessagesLoading: false,
@@ -21,7 +22,7 @@ export const useChatStore = create((set, get) => ({
     try {
       set({ isContactsLoading: true });
       const res = await axiosInstance.get("/friends");
-      set({ allContacts: res.data.friends });
+      set({ allContacts: res.data });
     } catch (error) {
       console.log("Error getting all contacts", error);
     } finally {
@@ -32,7 +33,7 @@ export const useChatStore = create((set, get) => ({
     try {
       set({ isChatsLoading: true });
       const res = await axiosInstance.get("/chats");
-      set({ allChats: res.data.chats });
+      set({ allChats: res.data });
     } catch (error) {
       console.log("Error getting all chats", error);
     } finally {
@@ -43,7 +44,7 @@ export const useChatStore = create((set, get) => ({
     try {
       set({ isCurrentChatLoading: true });
       const res = await axiosInstance.get(`/chats/${id}`);
-      set({ currentChat: res.data.chat });
+      set({ currentChat: res.data });
     } catch (error) {
       console.log("Error getting current chat", error);
     } finally {
@@ -52,16 +53,16 @@ export const useChatStore = create((set, get) => ({
   },
   getMessages: async (id) => {
     try {
-      const { page, limit } = get();
       set({ isMessagesLoading: true });
+      const { currentPage, limit } = get();
       const res = await axiosInstance.get(
-        `/messages/${id}?page=${page}&limit=${limit}`
+        `/chats/${id}/messages?page=${currentPage + 1}&limit=${limit}`
       );
       set({
         messages: res.data.messages,
         currentPage: res.data.currentPage,
         totalPages: res.data.totalPages,
-        totalMessages: res.data.totalMesages,
+        totalMessages: res.data.totalMessages,
       });
     } catch (error) {
       console.log("Error getting messages", error);
@@ -73,7 +74,7 @@ export const useChatStore = create((set, get) => ({
     set({
       message: [],
       currentChat: null,
-      currentPage: 1,
+      currentPage: 0,
       totalPages: 1,
       totalMessages: 0,
     });
