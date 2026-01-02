@@ -61,3 +61,31 @@
 .border-top {
   @apply border-t border-slate-700/50;
 }
+
+.user-online {
+  @apply size-2 bg-green-500 rounded-full ml-auto;
+}
+
+@layer utilities {
+  /* Ẩn thanh cuộn mặc định nhưng vẫn cho phép cuộn */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px; /* Độ rộng thanh cuộn */
+  }
+
+  /* Track (nền thanh cuộn) - để trong suốt */
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle (thanh kéo) - màu xám nhạt, chỉ hiện rõ khi hover container nếu muốn */
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #475569; /* slate-600 */
+    border-radius: 5px;
+    border: 2px solid #0f172a; /* slate-900 (trùng màu nền để tạo hiệu ứng padding) */
+  }
+
+  /* Khi hover vào thanh kéo thì đậm hơn chút */
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #64748b; /* slate-500 */
+  }
+}

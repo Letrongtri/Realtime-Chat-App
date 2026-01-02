@@ -5,9 +5,6 @@ export const useChatStore = create((set, get) => ({
   allChats: [],
   isChatsLoading: false,
 
-  allContacts: [],
-  isContactsLoading: false,
-
   currentChat: null,
   isCurrentChatLoading: false,
 
@@ -18,17 +15,6 @@ export const useChatStore = create((set, get) => ({
   totalMessages: 0,
   isMessagesLoading: false,
 
-  getAllContacts: async () => {
-    try {
-      set({ isContactsLoading: true });
-      const res = await axiosInstance.get("/friends");
-      set({ allContacts: res.data });
-    } catch (error) {
-      console.log("Error getting all contacts", error);
-    } finally {
-      set({ isContactsLoading: false });
-    }
-  },
   getAllChats: async () => {
     try {
       set({ isChatsLoading: true });

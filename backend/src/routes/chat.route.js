@@ -4,6 +4,7 @@ import {
   createChat,
   deleteChat,
   getAllChats,
+  getAllGroups,
   getChatById,
   updateChat,
   leaveChat,
@@ -23,6 +24,8 @@ router.use(protectRoute);
 
 router.get("/", getAllChats);
 router.post("/", createChat);
+
+router.get("/groups", getAllGroups);
 
 router.get("/:chatId", getChatById);
 router.put("/:chatId", handleUploadAvatar, updateChat); // change group name, add members

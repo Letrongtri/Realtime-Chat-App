@@ -23,6 +23,24 @@ export const getAllChats = async (req, res) => {
   }
 };
 
+export const getAllGroups = async (req, res) => {
+  try {
+    const user = req.user;
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const groups = await Chat.find({
+      members: { $in: [user._id] },
+      isGroup: true,
+    }).sort({ groupName: 1 });
+    res.status(200).json(groups);
+  } catch (error) {
+    console.log("Error getting all groups controller:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const createChat = async (req, res) => {
   try {
     const user = req.user;
