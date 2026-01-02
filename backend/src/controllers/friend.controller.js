@@ -29,7 +29,7 @@ export const getPendingFriendRequest = async (req, res) => {
     const friends = await FriendRequest.find({
       receiverId: user._id,
       status: "pending",
-    });
+    }).populate("senderId");
 
     res.status(200).json(friends);
   } catch (error) {

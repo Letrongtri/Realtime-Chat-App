@@ -26,10 +26,16 @@ function ChatPage() {
             {activeTab === "search" ? (
               <SearchPreview />
             ) : (
-              <div className="border-top">
+              <div className="border-top flex-1 flex flex-col min-h-0">
                 <ActiveTabSwitch />
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-2 border-top">
+                <div
+                  className={`flex-1 border-top ${
+                    activeTab === "chats"
+                      ? "overflow-y-auto p-4 space-y-2"
+                      : "overflow-hidden h-full p-0"
+                  }`}
+                >
                   {activeTab === "chats" ? <ChatList /> : <ContactList />}
                 </div>
               </div>
