@@ -20,9 +20,12 @@ export const generateChatAvatarPath = (chat, currentUserId) => {
 export const generatePreviewMessage = (message, currentUserId) => {
   var sender = "";
 
-  if (message.senderId !== currentUserId) {
-    sender = `${message.senderId}: `;
+  if (message.senderId._id === currentUserId) {
+    sender = "You: ";
+  } else {
+    sender = `${message.senderId.fullName}: `;
   }
+
   if (message.messageType === "text") {
     return sender + message.text;
   } else if (message.messageType === "image") {
