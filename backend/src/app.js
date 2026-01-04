@@ -10,8 +10,8 @@ import chatRouter from "./routes/chat.route.js";
 import messageRouter from "./routes/message.route.js";
 import { ENV } from "./lib/env.js";
 import { arcjectProtection } from "./middleware/arcject.middleware.js";
+import { app } from "./lib/socket.js";
 
-const app = express();
 const __dirname = path.resolve();
 
 app.use(express.json()); // for parsing application/json

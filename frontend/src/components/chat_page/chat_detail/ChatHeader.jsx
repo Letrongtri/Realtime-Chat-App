@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 function ChatHeader() {
-  const { authUser } = useAuthStore();
+  const { authUser, onlineUsers } = useAuthStore();
   const { currentChat, refreshChat } = useChatStore();
 
   useEffect(() => {
@@ -32,11 +32,20 @@ function ChatHeader() {
 
   const currentUserId = authUser._id;
 
+  var isOnline = false;
+
+  if (!currentChat.isGroup) {
+    const partner = currentChat.members.find(
+      (member) => member._id !== authUser._id
+    );
+    isOnline = onlineUsers.includes(partner._id);
+  }
+
   return (
     <div className="flex justify-between items-center bg-slate-800/50 border-b border-slate-700/50 max-h-[68px] px-6 flex-1">
       <div className="flex items-center gap-3">
         <div
-          className="avatar online w-12 h-12 cursor-pointer"
+          className={`avatar ${isOnline ? "online" : ""} w-12 h-12 cursor-pointer`}
           onClick={() => {}}
         >
           <img
@@ -50,7 +59,9 @@ function ChatHeader() {
           <h3 className="text-slate-200 font-medium text-base flex-1 truncate">
             {generateChatName(currentChat, currentUserId)}
           </h3>
-          <p className="text-sm text-slate-400 truncate">Online</p>
+          <p className="text-sm text-slate-400 truncate">
+            {isOnline ? "Online" : "Offline"}
+          </p>
         </div>
       </div>
 

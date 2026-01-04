@@ -5,10 +5,12 @@ import { useContactStore } from "../../../store/useContactStore";
 import { User, Users, Bell } from "lucide-react";
 import ContactSection from "./ContactSection";
 import { formatMessageTime } from "../../../lib/dateFns";
+import { useAuthStore } from "../../../store/useAuthStore";
 
 function ContactList() {
   const { friends, groups, requests, isLoading, getContacts, selectContact } =
     useContactStore();
+  const { onlineUsers } = useAuthStore();
 
   useEffect(() => {
     getContacts();
@@ -32,8 +34,11 @@ function ContactList() {
                 <User size={14} />
                 <span>{friend.fullName}</span>
 
-                {/* TODO: FIX ONLINE STATUS */}
-                <div className="user-online"></div>
+                <div
+                  className={
+                    onlineUsers.includes(friend._id) ? "user-online" : ""
+                  }
+                ></div>
               </li>
             ))}
           </ul>

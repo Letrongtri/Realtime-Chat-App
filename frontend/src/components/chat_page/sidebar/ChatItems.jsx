@@ -8,7 +8,13 @@ import {
 } from "../../../utils/generate";
 
 function ChatItems({ chat, onSelectchat }) {
-  const { authUser } = useAuthStore();
+  const { authUser, onlineUsers } = useAuthStore();
+  var isOnline = false;
+
+  if (!chat.isGroup) {
+    const partner = chat.members.find((member) => member._id !== authUser._id);
+    isOnline = onlineUsers.includes(partner._id);
+  }
   return (
     <div
       key={chat._id}
@@ -16,8 +22,7 @@ function ChatItems({ chat, onSelectchat }) {
       className="cursor-pointer bg-cyan-500/10 p-3 rounded-lg hover:bg-cyan-500/20 transition-colors"
     >
       <div className="flex items-center gap-3">
-        {/* TODO: Fix online status with socket */}
-        <div className={`avatar online`}>
+        <div className={`avatar ${isOnline ? "online" : ""}`}>
           <div className="size-12 rounded-full">
             <img
               src={generateChatAvatarPath(chat, authUser._id)}
