@@ -25,7 +25,7 @@ function ChatItems({ chat, onSelectchat }) {
             />
           </div>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 overflow-hidden">
           <div className="flex gap-2">
             <h4 className="text-slate-200 font-medium truncate pb-1 flex-1">
               {generateChatName(chat, authUser._id)}

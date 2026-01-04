@@ -3,6 +3,7 @@ import {
   differenceInYears,
   formatDistanceToNow,
   format,
+  differenceInMinutes,
 } from "date-fns";
 import { enUS } from "date-fns/locale";
 
@@ -34,4 +35,14 @@ export const formatMessageTime = (date) => {
   }
 
   return format(targetDate, "dd/MM", { locale: enUS });
+};
+
+export const formatTime = (date) => format(date, "HH:mm", { locale: enUS });
+
+export const getTimeDiffInMinutes = (firstDate, secondDate) => {
+  return differenceInMinutes(new Date(firstDate), new Date(secondDate));
+};
+
+export const formatMessageDate = (date) => {
+  return format(date, "MMM d, yyyy HH:mm", { locale: enUS });
 };

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
+import toast from "react-hot-toast";
 
 export const useChatStore = create((set, get) => ({
   allChats: [],
@@ -13,7 +14,9 @@ export const useChatStore = create((set, get) => ({
   currentPage: 0,
   totalPages: 1,
   totalMessages: 0,
+  hasMoreMessages: true,
   isMessagesLoading: false,
+  isSendingMessage: false,
 
   getAllChats: async () => {
     try {
@@ -39,16 +42,19 @@ export const useChatStore = create((set, get) => ({
   },
   getMessages: async (id) => {
     try {
+      if (!get().hasMoreMessages) return;
+
       set({ isMessagesLoading: true });
       const { currentPage, limit } = get();
       const res = await axiosInstance.get(
         `/chats/${id}/messages?page=${currentPage + 1}&limit=${limit}`
       );
       set({
-        messages: res.data.messages,
+        messages: res.data.messages.reverse(),
         currentPage: res.data.currentPage,
         totalPages: res.data.totalPages,
         totalMessages: res.data.totalMessages,
+        hasMoreMessages: res.data.messages.length === limit,
       });
     } catch (error) {
       console.log("Error getting messages", error);
@@ -57,14 +63,50 @@ export const useChatStore = create((set, get) => ({
     }
   },
   selectChat: async (id) => {
+    get().refreshChat();
+    await Promise.all([get().getCurrentChat(id), get().getMessages(id)]);
+  },
+
+  refreshChat: () => {
     set({
-      message: [],
+      messages: [],
       currentChat: null,
       currentPage: 0,
       totalPages: 1,
       totalMessages: 0,
+      hasMoreMessages: true,
     });
-    await Promise.all([get().getCurrentChat(id), get().getMessages(id)]);
-    set({ isCurrentChatLoading: false });
+  },
+
+  sendMessage: async (data) => {
+    try {
+      set({ isSendingMessage: true });
+      const { text, images, media } = data;
+
+      if (!text && images.length === 0 && !media) return;
+
+      const formData = new FormData();
+      if (images.length > 0) {
+        formData.append("messageType", "image");
+        images.forEach((img) => formData.append("files", img));
+      } else if (media) {
+        formData.append("messageType", media.type);
+        formData.append("files", media.file);
+      } else {
+        formData.append("messageType", "text");
+        formData.append("text", text);
+      }
+
+      const res = await axiosInstance.post(
+        `/chats/${get().currentChat._id}/messages`,
+        formData
+      );
+      set({ messages: [...get().messages, res.data] });
+    } catch (error) {
+      console.log("Error sending message", error);
+      toast.error(error.response.data.message);
+    } finally {
+      set({ isSendingMessage: false });
+    }
   },
 }));
